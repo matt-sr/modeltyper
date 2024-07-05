@@ -61,7 +61,7 @@ class ModelTyperCommand extends Command
     public function handle(Generator $generator): int
     {
         try {
-            $this->line($generator(
+            echo($generator(
                 $this->option('model'),
                 $this->option('global'),
                 $this->option('json'),
