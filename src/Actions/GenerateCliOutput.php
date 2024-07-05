@@ -41,7 +41,7 @@ class GenerateCliOutput
         $relationWriter = app(WriteRelationship::class);
 
         if ($global) {
-            $this->output .= "export {}\ndeclare global {\n  export namespace models {\n\n";
+            $this->output .= "export {}\n\ndeclare global {\n\n";
             $this->indent = '    ';
         }
 
@@ -66,7 +66,7 @@ class GenerateCliOutput
 
             $this->imports = array_merge($this->imports, $imports->toArray());
 
-            $entry .= "{$this->indent}export interface {$name} {\n";
+            $entry .= "{$this->indent}interface {$name} {\n";
 
             if ($columns->isNotEmpty()) {
                 $entry .= "{$this->indent}  // columns\n";
@@ -152,7 +152,7 @@ class GenerateCliOutput
             });
 
         if ($global) {
-            $this->output .= "  }\n}\n\n";
+            $this->output .= "  \n}\n}";
         }
 
         return substr($this->output, 0, strrpos($this->output, "\n"));

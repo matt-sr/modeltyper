@@ -66,7 +66,7 @@ class ModelInterface
         $allCode = $this->getImports($models);
 
         if ($this->global) {
-            $allCode .= "export {}\ndeclare global {\n  export namespace models {\n\n";
+            $allCode .= "export {}\n\ndeclare global {\n\n";
             $this->space = '    ';
         }
 
@@ -77,7 +77,7 @@ class ModelInterface
             $allCode .= $this->getCode($interface);
         }
         if ($this->global) {
-            $allCode .= "  }\n}\n\n";
+            $allCode .= "  }";
         }
 
         return substr($allCode, 0, strrpos($allCode, "\n"));
