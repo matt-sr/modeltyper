@@ -6,6 +6,7 @@ use FumeApp\ModelTyper\Actions\Generator;
 use FumeApp\ModelTyper\Exceptions\ModelTyperException;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Illuminate\Support\Facades\File;
 
 #[AsCommand(name: 'model:typer')]
 class ModelTyperCommand extends Command
@@ -61,7 +62,7 @@ class ModelTyperCommand extends Command
     public function handle(Generator $generator): int
     {
         try {
-            echo($generator(
+            $output = $generator(
                 $this->option('model'),
                 $this->option('global'),
                 $this->option('json'),
@@ -75,7 +76,20 @@ class ModelTyperCommand extends Command
                 $this->option('resolve-abstract'),
                 $this->option('fillables'),
                 $this->option('fillable-suffix')
-            ));
+            );
+
+            $path = resource_path('js/models.d.ts');
+
+            // Ensure the directory exists
+            $directory = dirname($path);
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true);
+            }
+
+            // Save the output to the file
+            File::put($path, $output);
+
+            $this->info('Output saved to ' . $path);
         } catch (ModelTyperException $exception) {
             $this->error($exception->getMessage());
 
