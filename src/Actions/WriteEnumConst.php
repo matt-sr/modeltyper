@@ -51,7 +51,7 @@ class WriteEnumConst
             });
 
             $entry .= "{$indent}} as const;\n\n";
-            $entry .= "{$indent}export type {$reflection->getShortName()} = typeof {$reflection->getShortName()}[keyof typeof {$reflection->getShortName()}]\n\n";
+            $entry .= "{$indent}export type T{$reflection->getShortName()} = typeof {$reflection->getShortName()}[keyof typeof {$reflection->getShortName()}]\n\n";
         }
 
         if ($jsonOutput) {
