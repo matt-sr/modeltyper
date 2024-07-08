@@ -11,7 +11,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Pluralizer;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionEnum;
@@ -254,11 +253,8 @@ class ModelInterface
                 $code .= "{$this->space}  $key: $value\n";
             }
         }
-
-        Pluralizer::$uncountable = ['recommended', 'related', 'media'];
-
         $code .= "{$this->space}}\n";
-        $plural = Pluralizer::plural($interface->name);
+        $plural = Str::plural($interface->name);
         $code .= "{$this->space}export type $plural = {$interface->name}[]\n";
         $code .= "{$this->space}export interface {$interface->name}Results extends api.MetApiResults { data: $plural }\n";
         $code .= "{$this->space}export interface {$interface->name}Result extends api.MetApiResults { data: {$interface->name} }\n";
@@ -276,7 +272,6 @@ class ModelInterface
      */
     public function getRelations(Model $model): array
     {
-        Pluralizer::$uncountable = ['recommended', 'related', 'media'];
         $relations = [];
         $methods = get_class_methods($model);
         foreach ($methods as $method) {
@@ -321,7 +316,7 @@ class ModelInterface
                         $type === 'Illuminate\Database\Eloquent\Relations\MorphToMany' ||
                         $type === 'Illuminate\Database\Eloquent\Relations\MorphMany'
                     ) {
-                        $relations[Str::snake($method)] = Pluralizer::plural($matches[1]);
+                        $relations[Str::snake($method)] = Str::plural($matches[1]);
                     }
 
                     if ($type === '?Illuminate\Database\Eloquent\Relations\BelongsToMany' ||
@@ -329,7 +324,7 @@ class ModelInterface
                         $type === '?Illuminate\Database\Eloquent\Relations\MorphToMany' ||
                         $type === '?Illuminate\Database\Eloquent\Relations\MorphMany'
                     ) {
-                        $relations[Str::snake($method) . '?'] = Pluralizer::plural($matches[1]);
+                        $relations[Str::snake($method) . '?'] = Str::plural($matches[1]);
                     }
                 }
             }

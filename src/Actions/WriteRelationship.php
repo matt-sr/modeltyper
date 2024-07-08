@@ -3,7 +3,6 @@
 namespace FumeApp\ModelTyper\Actions;
 
 use FumeApp\ModelTyper\Traits\ClassBaseName;
-use Illuminate\Support\Pluralizer;
 use Illuminate\Support\Str;
 
 class WriteRelationship
@@ -22,20 +21,18 @@ class WriteRelationship
         $relatedModel = $this->getClassName($relation['related']);
         $optional = $optionalRelation ? '?' : '';
 
-        Pluralizer::$uncountable = ['recommended', 'related', 'media'];
-
         $relationType = match ($relation['type']) {
-            'BelongsToMany', 'HasMany', 'HasManyThrough', 'MorphToMany', 'MorphMany', 'MorphedByMany' => $plurals === true ? Pluralizer::plural($relatedModel) : (Pluralizer::singular($relatedModel) . '[]'),
-            'BelongsTo', 'HasOne', 'HasOneThrough', 'MorphOne', 'MorphTo' => Pluralizer::singular($relatedModel),
+            'BelongsToMany', 'HasMany', 'HasManyThrough', 'MorphToMany', 'MorphMany', 'MorphedByMany' => $plurals === true ? Str::plural($relatedModel) : (Str::singular($relatedModel) . '[]'),
+            'BelongsTo', 'HasOne', 'HasOneThrough', 'MorphOne', 'MorphTo' => Str::singular($relatedModel),
             default => $relatedModel,
         };
 
         if (in_array($relation['type'], config('modeltyper.custom_relationships.singular', []))) {
-            $relationType = Pluralizer::singular($relation['type']);
+            $relationType = Str::singular($relation['type']);
         }
 
         if (in_array($relation['type'], config('modeltyper.custom_relationships.plural', []))) {
-            $relationType = Pluralizer::singular($relation['type']);
+            $relationType = Str::singular($relation['type']);
         }
 
         if ($jsonOutput) {

@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use Symfony\Component\Finder\SplFileInfo;
-use Illuminate\Support\Pluralizer;
 
 class GenerateCliOutput
 {
@@ -37,7 +36,6 @@ class GenerateCliOutput
      */
     public function __invoke(Collection $models, array $mappings, bool $global = false, bool $plurals = false, bool $apiResources = false, bool $optionalRelations = false, bool $noRelations = false, bool $noHidden = false, bool $optionalNullables = false, bool $resolveAbstract = false, bool $fillables = false, string $fillableSuffix = 'Fillable'): string
     {
-        Pluralizer::$uncountable = ['recommended', 'related', 'media'];
         $modelBuilder = app(BuildModelDetails::class);
         $colAttrWriter = app(WriteColumnAttribute::class);
         $relationWriter = app(WriteRelationship::class);
@@ -114,7 +112,7 @@ class GenerateCliOutput
             $entry .= "{$this->indent}}\n";
 
             if ($plurals) {
-                $plural = Pluralizer::plural($name);
+                $plural = Str::plural($name);
                 $entry .= "{$this->indent}export type $plural = {$name}[]\n";
 
                 if ($apiResources) {
