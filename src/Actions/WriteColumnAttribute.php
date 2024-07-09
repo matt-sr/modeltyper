@@ -78,7 +78,9 @@ class WriteColumnAttribute
                             if (Str::contains($attribute['cast'], '\\')) {
                                 $reflection = (new ReflectionClass($attribute['cast']));
                                 if ($reflection->isEnum()) {
-                                    $type = "T".$this->getClassName($attribute['cast']);
+                                    $nameType = config('modeltyper.prefixes.enumType')."{$this->getClassName($attribute['cast'])}".config('modeltyper.suffixes.enumType');
+
+                                    $type = $nameType;
                                     $enumRef = $reflection;
                                 }
                             } else {

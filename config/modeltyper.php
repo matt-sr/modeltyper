@@ -22,6 +22,19 @@ return [
         // 'binary' => 'Blob',
     ],
 
+    // Text prepended to items
+    'prefixes' => [
+        // 'enumType' => 'T',
+        // 'enumConst' => 'Enum',
+        // 'model' => 'I',
+    ],
+
+    // Text appended to items
+    'suffixes' => [
+        // 'enumType' => 'Enum',
+        // 'model' => 'Interface',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Custom relationships

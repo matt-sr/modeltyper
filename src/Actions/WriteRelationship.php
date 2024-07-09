@@ -42,6 +42,8 @@ class WriteRelationship
             ];
         }
 
-        return "{$indent}  {$name}{$optional}: I{$relationType}\n";
+        $modelName = config('modeltyper.prefixes.model')."$relationType".config('modeltyper.suffixes.model');
+
+        return "{$indent}  {$name}{$optional}: {$modelName}\n";
     }
 }

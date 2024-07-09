@@ -37,7 +37,7 @@ class BuildModelDetails
         $laravelModel = $reflectionModel->newInstance();
         $databaseColumns = $laravelModel->getConnection()->getSchemaBuilder()->getColumnListing($laravelModel->getTable());
 
-        $name = "I".$this->getClassName($modelDetails['class']);
+        $name = config('modeltyper.prefixes.model').$this->getClassName($modelDetails['class']).config('modeltyper.suffixes.model');
         $columns = collect($modelDetails['attributes'])->filter(fn ($att) => in_array($att['name'], $databaseColumns));
         $nonColumns = collect($modelDetails['attributes'])->filter(fn ($att) => ! in_array($att['name'], $databaseColumns));
         $relations = collect($modelDetails['relations']);

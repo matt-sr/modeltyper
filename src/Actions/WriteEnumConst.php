@@ -27,8 +27,11 @@ class WriteEnumConst
 
         $cases = collect($reflection->getConstants());
 
+        $nameType = config('modeltyper.prefixes.enumType')."{$reflection->getShortName()}".config('modeltyper.suffixes.enumType');
+        $nameConst = config('modeltyper.prefixes.enumConst')."{$reflection->getShortName()}".config('modeltyper.suffixes.enumConst');
+
         if ($cases->isNotEmpty()) {
-            $entry .= "{$indent}const {$reflection->getShortName()} = {\n";
+            $entry .= "{$indent}const $nameConst = {\n";
 
             $cases->each(function ($case) use ($indent, &$entry, $comments) {
                 $name = $case->name;
@@ -51,7 +54,7 @@ class WriteEnumConst
             });
 
             $entry .= "{$indent}} as const;\n\n";
-            $entry .= "{$indent}export type T{$reflection->getShortName()} = typeof {$reflection->getShortName()}[keyof typeof {$reflection->getShortName()}]\n\n";
+            $entry .= "{$indent}export type $nameType = typeof {$nameConst}[keyof typeof {$nameConst}]\n\n";
         }
 
         if ($jsonOutput) {
