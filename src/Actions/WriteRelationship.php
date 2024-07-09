@@ -46,6 +46,6 @@ class WriteRelationship
             ];
         }
 
-        return "{$indent}  {$name}{$optional}: {$modelName}\n";
+        return "{$indent}  {$name}{$optional}: {$relationType}\n";
     }
 }
