@@ -21,18 +21,22 @@ class WriteRelationship
         $relatedModel = $this->getClassName($relation['related']);
         $optional = $optionalRelation ? '?' : '';
 
+        function buildName($str){
+            return config('modeltyper.prefixes.model')."$str".config('modeltyper.suffixes.model');
+        }
+
         $relationType = match ($relation['type']) {
-            'BelongsToMany', 'HasMany', 'HasManyThrough', 'MorphToMany', 'MorphMany', 'MorphedByMany' => $plurals === true ? Str::plural($relatedModel) : (Str::singular($relatedModel) . '[]'),
-            'BelongsTo', 'HasOne', 'HasOneThrough', 'MorphOne', 'MorphTo' => Str::singular($relatedModel),
-            default => $relatedModel,
+            'BelongsToMany', 'HasMany', 'HasManyThrough', 'MorphToMany', 'MorphMany', 'MorphedByMany' => $plurals === true ? buildName(Str::plural($relatedModel)) : (buildName(Str::singular($relatedModel)) . '[]'),
+            'BelongsTo', 'HasOne', 'HasOneThrough', 'MorphOne', 'MorphTo' => buildName(Str::singular($relatedModel)),
+            default => buildName($relatedModel),
         };
 
         if (in_array($relation['type'], config('modeltyper.custom_relationships.singular', []))) {
-            $relationType = Str::singular($relation['type']);
+            $relationType = buildName(Str::singular($relation['type']));
         }
 
         if (in_array($relation['type'], config('modeltyper.custom_relationships.plural', []))) {
-            $relationType = Str::singular($relation['type']);
+            $relationType = buildName(Str::singular($relation['type']));
         }
 
         if ($jsonOutput) {
@@ -41,8 +45,6 @@ class WriteRelationship
                 'type' => $relationType,
             ];
         }
-
-        $modelName = config('modeltyper.prefixes.model')."$relationType".config('modeltyper.suffixes.model');
 
         return "{$indent}  {$name}{$optional}: {$modelName}\n";
     }
